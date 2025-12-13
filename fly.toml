@@ -1,0 +1,8 @@
+# fly.toml app configuration file generated for sumdonksdiscordbot on 2023-07-04T02:32:20-07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "sumdonksdiscordbot"
+primary_region = "lax"
+
