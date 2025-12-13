@@ -6,7 +6,7 @@ import random
 import kickmenu
 
 
-
+# Strike system no longer works
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
 mydb = myclient["Hailee"]
 collection = mydb["Strikes"]
@@ -60,7 +60,7 @@ def give_strike(user):
     if new_strikes:
         return new_strikes
     else:
-        return "looks like this is your first strike retard, cant wait for more!"
+        return "looks like this is your first strike buddy, cant wait for more!"
 
 
 flopped_users = {}
