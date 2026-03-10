@@ -1,1 +1,8 @@
 .env
+__pycache__/bot.cpython-313.pyc
+__pycache__/fun.cpython-313.pyc
+__pycache__/globals.cpython-313.pyc
+.gitignore
+__pycache__/responses.cpython-313.pyc
+__pycache__/kickmenu.cpython-313.pyc
+__pycache__/yt_dl.cpython-313.pyc

@@ -1,20 +1,22 @@
 import discord
-import openai
+import kickmenu
 from discord import app_commands
-from discord.ext import commands
+from discord.ext import commands, tasks
 import os
 import responses
 import fun
 import aiohttp
 from datetime import datetime, timedelta
 import yt_dl
+import asyncio
+import globals
 from dotenv import load_dotenv
 load_dotenv()
 
 current_time = datetime.now()
+multiplier = 1
 
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # FFMPEG_OPTIONS = {
 # 'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5',
@@ -44,6 +46,7 @@ def run_discord_bot():
         print(f'Logged on as {bot.user}!')
 
         await bot.tree.sync()
+        birthday_checker.start()  # Start the background task
 
     @bot.event
     async def on_message(message):
@@ -101,9 +104,32 @@ def run_discord_bot():
                     if after.nick != before.nick:
                         await after.edit(nick=before.nick) 
 
+    # Birthday checking task - runs daily at midnight
+    @tasks.loop(hours=24)
+    async def birthday_checker():
+        channel = bot.get_channel(364144447220482051)
+        todays_birthdays = fun.check_today_birthdays()
+        
+        if todays_birthdays:
+            for user_id, age in todays_birthdays:
+                try:
+                    user = await bot.fetch_user(user_id)
+                    greeting = fun.birthday_greeting(user, age)
+                    await channel.send(greeting)
+                except Exception as e:
+                    print(f"Error sending birthday greeting to user {user_id}: {e}")
+    
+    @birthday_checker.before_loop
+    async def before_birthday_checker():
+        await bot.wait_until_ready()
+        now = datetime.now()
+        tomorrow = now + timedelta(days=1)
+        midnight = tomorrow.replace(hour=0, minute=0, second=0, microsecond=0)
+        wait_seconds = (midnight - now).total_seconds()
+        await asyncio.sleep(wait_seconds)
                         
 
-    @bot.command() # deprecated
+    """@bot.command() # deprecated
     async def hailee(ctx, *, message):
         print("this works")
         response = openai.ChatCompletion.create(
@@ -114,19 +140,24 @@ def run_discord_bot():
             ]
         )
         await ctx.send(response['choices'][0]['message']['content'])
-
+"""
 
     @bot.hybrid_command()
     async def shutup(ctx, member: discord.Member):
         current_time = discord.utils.utcnow()
         await member.timeout(current_time + timedelta(seconds=7), reason= "get bent")
 
-    @bot.hybrid_command() # broken
+    @bot.hybrid_command()
     async def iwanttoplayagame(ctx, member: discord.Member):
-        ctx.channel.send(f"let's play a game {member.name}")
-        embed = discord.Embed(title="I want to play a game", description=f"guess which hand I am holding your kick in", color=0x00ff00)
+        """Prompt the mentioned member with the timeout game menu."""
+        # respond to the interaction immediately so it doesn't timeout
+        menu = kickmenu.TimeoutMenu(member)
+        await ctx.send(f"{member.name}, pick your fate!", view=menu)
 
-
+    @bot.hybrid_command()
+    async def heat_riser(ctx):
+        globals.heat += 1
+        await ctx.send("Raising the heat <:smugcanny:1373186622182395914>\nThe current heat is now " + str(globals.heat) + ":fire:")
 
     queue = []
     @bot.hybrid_command() # somewhat broken

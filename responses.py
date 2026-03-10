@@ -18,30 +18,34 @@ ismael = os.getenv("ISMAEL")
 mariney = os.getenv("MARINEY")
 hailee = os.getenv("HAILEE")
 aaryn = os.getenv("AARYN")
-multiplier = 1
+import globals
 
 async def handle_response(message):
     msg = message.content.lower()
-    global multiplier
-    print(multiplier)
+    print(globals.heat)
+    heat = globals.heat
     # certainties (need to execute)
     if message.author.id == 193940138680778753:
         if random.randint(1, 75) == 1:
             await message.channel.send("you're talking too much <:shutup:1112973051869544508>")
-            await message.author.timeout(timedelta(minutes=(1*multiplier)), reason="get bent")
-            multiplier = 1
-    elif random.randint(1, 150) == 1:
-            await message.channel.send("you're talking too much <:shutup:1112973051869544508>")
-            if message.author.id == donk:
-                await message.channel.send("that was meant for donk, but we're doubling it and giving it to the next person!")
-                multiplier *= 2
-            elif message.author.id == guac:
-                await message.channel.send("that was meant for guac, but we're doubling it and giving it to the next person!")
-                multiplier *= 2
-            else:
-                await message.author.timeout(timedelta(minutes=(1*multiplier)), reason="get bent")
-                multiplier = 1
-                
+            await message.author.timeout(timedelta(minutes=(1*heat)), reason="get bent")
+            globals.heat = 1
+    elif random.randint(1, 5) == 1:
+        await message.channel.send("you're talking too much <:shutup:1112973051869544508>")
+        # environment variables are strings, so compare to str(message.author.id)
+        if str(message.author.id) == donk:
+            await message.channel.send("that was meant for donk, but we're doubling it and giving it to the next person!")
+            globals.heat *= 2
+            await message.channel.send("The current heat is now " + str(globals.heat) + ":fire:")
+        elif str(message.author.id) == guac:
+            await message.channel.send("that was meant for guac, but we're doubling it and giving it to the next person!")
+            globals.heat *= 2
+            await message.channel.send("The current heat is now " + str(globals.heat) + ":fire:")
+        else:
+            await message.author.timeout(timedelta(minutes=(1*globals.heat)), reason="get bent")
+            globals.heat = 1
+            await message.channel.send("heat has been reset")
+
     if msg.startswith("hailee kick"):
         if message.mentions:
             if message.author.guild_permissions.administrator:

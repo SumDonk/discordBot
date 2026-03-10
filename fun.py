@@ -1,15 +1,26 @@
 from time import time
 import ffmpeg
 import os
-import pymongo
 import random
 import kickmenu
+from dotenv import load_dotenv
 
+load_dotenv()
 
-# Strike system no longer works
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["Hailee"]
-collection = mydb["Strikes"]
+joe = os.getenv("JOE")
+guac = os.getenv("GUAC")
+donk = os.getenv("DONK")
+jon = os.getenv("JON")
+brandon = os.getenv("BRANDON")
+ismael = os.getenv("ISMAEL")
+mariney = os.getenv("MARINEY")
+hailee = os.getenv("HAILEE")
+aaryn = os.getenv("AARYN")
+
+"""# Strike system no longer works
+# myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+# mydb = myclient["Hailee"]
+# collection = mydb["Strikes"]
 
 
 async def violate_resolution(in_file, out_file, resolutionX, resolutionY):
@@ -61,7 +72,7 @@ def give_strike(user):
         return new_strikes
     else:
         return "looks like this is your first strike buddy, cant wait for more!"
-
+"""
 
 flopped_users = {}
 
@@ -87,3 +98,34 @@ async def kick_game(user, msgobj):
         right_hand = True
     await kickmenu.show_menu(msgobj)
 
+# Hardcoded birthdays: {user_id: (month, day, birth_year)}
+# Example: {123456789: (2, 25, 1995)} means February 25th, 1995
+BIRTHDAYS = {
+    # Add birthdays here in format: user_id: (month, day, birth_year)
+    # 123456789: (2, 25, 1995),  # Example: February 25th, 1995
+    donk:(11,18,1999),
+    brandon:(8, 17, 1999),
+    guac:(6,21,2000),
+    jon:(9,7,2000),
+    joe:(8,25,2000),
+    994350732205637723:(9,15,2002), #daquavious bingleton
+    ismael:(8,13,2000)
+
+}
+
+
+def birthday_greeting(user, age):
+    return f"Happy happy birthday, from all of us to you. Happy happy birthday from the discord nickels crew! {user.name} is {age} now <:dead:1039841008252375040>"
+
+
+def check_today_birthdays():
+    from datetime import datetime
+    today = datetime.now()
+    todays_birthdays = []
+    
+    for user_id, (month, day, birth_year) in BIRTHDAYS.items():
+        if today.month == month and today.day == day:
+            age = today.year - birth_year
+            todays_birthdays.append((user_id, age))
+    
+    return todays_birthdays
