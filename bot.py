@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 current_time = datetime.now()
-multiplier = 1
 
 # openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -149,8 +148,6 @@ def run_discord_bot():
 
     @bot.hybrid_command()
     async def iwanttoplayagame(ctx, member: discord.Member):
-        """Prompt the mentioned member with the timeout game menu."""
-        # respond to the interaction immediately so it doesn't timeout
         menu = kickmenu.TimeoutMenu(member)
         await ctx.send(f"{member.name}, pick your fate!", view=menu)
 

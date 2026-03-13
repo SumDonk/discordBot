@@ -26,11 +26,11 @@ async def handle_response(message):
     heat = globals.heat
     # certainties (need to execute)
     if message.author.id == 193940138680778753:
-        if random.randint(1, 75) == 1:
+        if random.randint(1, 70) == 1:
             await message.channel.send("you're talking too much <:shutup:1112973051869544508>")
             await message.author.timeout(timedelta(minutes=(1*heat)), reason="get bent")
             globals.heat = 1
-    elif random.randint(1, 5) == 1:
+    elif random.randint(1, 150) == 1:
         await message.channel.send("you're talking too much <:shutup:1112973051869544508>")
         # environment variables are strings, so compare to str(message.author.id)
         if str(message.author.id) == donk:
@@ -45,20 +45,8 @@ async def handle_response(message):
             await message.author.timeout(timedelta(minutes=(1*globals.heat)), reason="get bent")
             globals.heat = 1
             await message.channel.send("heat has been reset")
-
-    if msg.startswith("hailee kick"):
-        if message.mentions:
-            if message.author.guild_permissions.administrator:
-                mentioned_user = message.mentions[0]
-                file = discord.File('images/guess.jpg')
-                await message.channel.send(file=file)
-                await fun.kick_game(mentioned_user, message)
-            else:
-                await message.channel.send("YOU DONT HAVE PERMS")
-        else:
-            await message.channel.send("KICK WHO??")
-
-    if msg.startswith("hailee strike"):
+        
+    '''if msg.startswith("hailee strike"): #not working at the moment, might come back
         if message.mentions:
             if message.author.guild_permissions.administrator:
                 mentioned_user = message.mentions[0]
@@ -69,6 +57,7 @@ async def handle_response(message):
             await message.channel.send("STRIKE WHO??")
     if msg == "hailee show me the strikes":
         await fun.display_all_strikes(message)
+        '''
     if msg.startswith("flop"):
         if message.mentions:
             mentioned_user = message.mentions[0]

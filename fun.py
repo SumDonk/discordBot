@@ -88,16 +88,6 @@ def flopper_disengage(user):
         del flopped_users[user.id]
     return user.name
 
-async def kick_game(user, msgobj):
-    number = random.randint(1, 10)
-    left_hand = False
-    right_hand = False
-    if number > 5:
-        left_hand = True
-    else:
-        right_hand = True
-    await kickmenu.show_menu(msgobj)
-
 # Hardcoded birthdays: {user_id: (month, day, birth_year)}
 # Example: {123456789: (2, 25, 1995)} means February 25th, 1995
 BIRTHDAYS = {
